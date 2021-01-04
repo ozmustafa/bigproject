@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 function App() {
   return (
     <div className="App">
-     <h2>Merhaba</h2>
+     <h2>Hello World</h2>
      <Button variant="primary">Test</Button>
     </div>
   );
