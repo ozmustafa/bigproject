@@ -1,2 +1,2 @@
 #React Create-Update-Delete Project
-In progress...
+#A full stack project used with ADO.NET and ReactJS
