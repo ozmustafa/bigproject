@@ -5,10 +5,11 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 
 
-export class AddDepModal extends Component {
+export class AddEmpModal extends Component {
     constructor(props) {
         super(props);
         this.state={
+            deps:[],
             snackbaropen:false,
             snackbarmsg:''
         }
@@ -16,12 +17,27 @@ export class AddDepModal extends Component {
         this.submitHandler=this.submitHandler.bind(this);
     }
 
+    componentDidMount() {
+        fetch('http://localhost:63208/api/department').then(response => response.json()).then(data=>{
+            this.setState({
+                deps:data
+            });
+            
+        })
+    }
+    
+
     submitHandler(e) {
         e.preventDefault();
         //Enter api url below
-        axios.post(`http://localhost:63208/api/department`,{
-            DepartmentID:null,
-            DepartmentName:e.target.DepartmentName.value
+        const newDOJ=e.target.DOJ.value.toString();
+        console.log(newDOJ);
+        axios.post(`http://localhost:63208/api/employee`,{
+            EmployeeID:null,
+            EmployeeName:e.target.EmployeeName.value,
+            Department:e.target.Department.value,
+            MailID:e.target.MailID.value,
+            DOJ:newDOJ
         })
         .then(res=>{
             this.setState({
@@ -47,6 +63,8 @@ export class AddDepModal extends Component {
             snackbaropen:false
         });
     }
+
+
     render() {
         return (
             <div className="container">
@@ -70,7 +88,7 @@ export class AddDepModal extends Component {
                 >
                     <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-title-vcenter">
-                            Add a new department
+                            Add a new employee
         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
@@ -79,11 +97,36 @@ export class AddDepModal extends Component {
                             <Row>
                                 <Col sm={6}>
                                     <Form onSubmit={this.submitHandler}>
-                                        <Form.Group  controlId="DepartmentName">
+                                        <Form.Group controlId="EmployeeName">
                                             <Form.Label>
-                                                Type department name below:
+                                                Type employee name below:
                                         </Form.Label>
-                                            <Form.Control type="text" name="DepartmentName" required placeholder="Department name" />
+                                            <Form.Control type="text" name="EmployeeName" required placeholder="Employee name" />
+                                        </Form.Group>
+                                        <Form.Group controlId="Department">
+                                            <Form.Label>
+                                                Select department name below:
+                                        </Form.Label>
+                                            <Form.Control as="select">
+                                                {this.state.deps.map(dep=>
+                                                    <option key={dep.DepartmentID} value={dep.DepartmentName}>
+                                                        {dep.DepartmentName}
+                                                    </option>
+                                                )}
+                                                
+                                            </Form.Control>
+                                        </Form.Group>
+                                        <Form.Group controlId="MailID">
+                                            <Form.Label>
+                                                Type mail address below:
+                                        </Form.Label>
+                                            <Form.Control type="text" name="MailID" required placeholder="example@domain.com" />
+                                        </Form.Group>
+                                        <Form.Group controlId="DOJ">
+                                            <Form.Label>
+                                                Select date of join below:
+                                        </Form.Label>
+                                            <Form.Control type="date" name="DOJ" required placeholder="Date of join" />
                                         </Form.Group>
                                         <Form.Group>
                                             <Button variant="primary" type="submit">

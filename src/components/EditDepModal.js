@@ -5,7 +5,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 
 
-export class AddDepModal extends Component {
+export class EditDepModal extends Component {
     constructor(props) {
         super(props);
         this.state={
@@ -19,8 +19,8 @@ export class AddDepModal extends Component {
     submitHandler(e) {
         e.preventDefault();
         //Enter api url below
-        axios.post(`http://localhost:63208/api/department`,{
-            DepartmentID:null,
+        axios.put(`http://localhost:63208/api/department`,{
+            DepartmentID:e.target.DepartmentID.value,
             DepartmentName:e.target.DepartmentName.value
         })
         .then(res=>{
@@ -57,7 +57,7 @@ export class AddDepModal extends Component {
                 onClose={this.snackbarClose}
                 message={<span id="msg-id">{this.state.snackbarmsg}</span>}
                 action={[
-                    <IconButton key="close" aria-label="Close" color="inherit" onClick={this.snackbarClose}>
+                    <IconButton key="close" aria-Label="Close" color="inherit" onClick={this.snackbarClose}>
                         X
                     </IconButton>
                 ]}
@@ -70,7 +70,7 @@ export class AddDepModal extends Component {
                 >
                     <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-title-vcenter">
-                            Add a new department
+                            Edit department
         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
@@ -79,15 +79,30 @@ export class AddDepModal extends Component {
                             <Row>
                                 <Col sm={6}>
                                     <Form onSubmit={this.submitHandler}>
+                                    <Form.Group controlId="DepartmentID">
+                                            <Form.Label>
+                                                Current department id is:
+                                        </Form.Label>
+                                            <Form.Control 
+                                            type="text" 
+                                            name="DepartmentID" 
+                                            required 
+                                            disabled
+                                            defaultValue={this.props.depID} />
+                                        </Form.Group>
                                         <Form.Group  controlId="DepartmentName">
                                             <Form.Label>
-                                                Type department name below:
+                                                Current department name is:
                                         </Form.Label>
-                                            <Form.Control type="text" name="DepartmentName" required placeholder="Department name" />
+                                            <Form.Control 
+                                            type="text" 
+                                            name="DepartmentName" 
+                                            required 
+                                            defaultValue={this.props.depName} />
                                         </Form.Group>
                                         <Form.Group>
-                                            <Button variant="primary" type="submit">
-                                                Add
+                                            <Button variant="primary" type="submit" onClick={this.props.onHide}>
+                                                Update
                                             </Button>
                                         </Form.Group>
                                     </Form>
